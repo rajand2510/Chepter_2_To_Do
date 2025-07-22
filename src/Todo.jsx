@@ -10,15 +10,11 @@ const Todo = () => {
         { id: 6, title: 'task 3', status: 'todo' },
         { id: 7, title: 'task 3', status: 'todo' },
         { id: 8, title: 'task 1', status: 'todo' },
-        { id: 9, title: 'task 2', status: 'in-progress' },
-        { id: 10, title: 'task 3', status: 'todo' },
-        { id: 11, title: 'task 3', status: 'todo' },
-        { id: 12, title: 'task 1', status: 'todo' },
-        { id: 13, title: 'task 2', status: 'in-progress' },
-        { id: 14, title: 'task 3', status: 'todo' },
+
     ]);
     const [newTask, setNewTask] = useState('');
-
+    const [newTaskStatus, setNewTaskStatus] = useState('todo'); // Add this line
+    const [theme, setTheme] = useState('black'); // State for theme
     // Add new task
     const handleAddTask = (e) => {
         e.preventDefault();
@@ -28,10 +24,11 @@ const Todo = () => {
             {
                 id: Date.now(),
                 title: newTask,
-                status: 'todo'
+                status: newTaskStatus // Use selected status
             }
         ]);
         setNewTask('');
+        setNewTaskStatus('todo'); // Reset to default
     };
 
     const handleStatusChange = (id, newStatus) => {
@@ -40,21 +37,21 @@ const Todo = () => {
         ));
     };
 
-const handleDeleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
-};
+    const handleDeleteTask = (id) => {
+        setTasks(tasks.filter(task => task.id !== id));
+    };
 
-const renderTasks = (status, color, textColor) => (
-    <ul className='overflow-y-auto max-h-[100%]'>
-        {tasks.filter(task => task.status === status).map((task) => (
-            <li
-                key={task.id}
+    const renderTasks = (status, color, textColor) => (
+        <ul className='overflow-y-auto max-h-[100%]'>
+            {tasks.filter(task => task.status === status).map((task) => (
+                <li
+                    key={task.id}
                     className={`${color} p-2 px-4 mb-1 rounded-3xl ${textColor} font-semibold flex justify-between items-center`}
                 >
                     <span>{task.title}</span>
                     {/* Dropdown Actions */}
                     <div className="hs-dropdown relative inline-flex">
-                        
+
                         <button
                             id={`hs-dropdown-default-${task.id}`}
                             type="button"
@@ -68,13 +65,13 @@ const renderTasks = (status, color, textColor) => (
                                 if (menu) menu.classList.toggle('hidden');
                             }}
                         >
-                           
+
                             <svg className="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                         </button>
                         <button onClick={() => handleDeleteTask(task.id)} className='text-xs px-1 h-4 my-2 ml-2 bg-black text-white rounded-3xl'>X</button>
                         <div
                             id={`dropdown-menu-${task.id}`}
-                            className="transition-[opacity,margin] duration opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 absolute z-10 right-0"
+                            className=" transition-[opacity,margin] duration opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg  absolute z-20 right-0"
                             style={{ opacity: 1 }}
                             role="menu"
                             aria-orientation="vertical"
@@ -108,8 +105,11 @@ const renderTasks = (status, color, textColor) => (
         </ul>
     );
     return (
-        <div className='flex flex-col items-center'>
-            {/* Input for adding new task */}
+        <div className={`flex flex-col items-center bg-${theme} h-screen`}>
+
+            <button className='absolute right-2 top-2 bg-gray-800 text-white px-4 py-2 rounded' onClick={() => setTheme(theme === 'black' ? 'white' : 'black')}>
+                []
+            </button>
             <form onSubmit={handleAddTask} className="flex gap-2 mb-6 w-1/2 bg-[#282828] mt-2 p-1 rounded-3xl">
                 <input
                     type="text"
@@ -118,6 +118,15 @@ const renderTasks = (status, color, textColor) => (
                     value={newTask}
                     onChange={e => setNewTask(e.target.value)}
                 />
+                <select
+                    className=" px-2 text-black bg-white focus:outline-none rounded-3xl "
+                    value={newTaskStatus}
+                    onChange={e => setNewTaskStatus(e.target.value)}
+                >
+                    <option value="todo">To Do</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                </select>
                 <button
                     type="submit"
                     className="bg-white text-black  px-5 mr-1 h-10 m rounded-3xl"
