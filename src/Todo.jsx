@@ -4,10 +4,18 @@ const Todo = () => {
     const [tasks, setTasks] = useState([
         { id: 1, title: 'task 1', status: 'todo' },
         { id: 2, title: 'task 2', status: 'in-progress' },
-        { id: 3, title: 'task 3', status: 'completed' },
+        { id: 3, title: 'task 3', status: 'todo' },
         { id: 4, title: 'task 1', status: 'todo' },
         { id: 5, title: 'task 2', status: 'in-progress' },
-        { id: 6, title: 'task 3', status: 'completed' },
+        { id: 6, title: 'task 3', status: 'todo' },
+        { id: 7, title: 'task 3', status: 'todo' },
+        { id: 8, title: 'task 1', status: 'todo' },
+        { id: 9, title: 'task 2', status: 'in-progress' },
+        { id: 10, title: 'task 3', status: 'todo' },
+        { id: 11, title: 'task 3', status: 'todo' },
+        { id: 12, title: 'task 1', status: 'todo' },
+        { id: 13, title: 'task 2', status: 'in-progress' },
+        { id: 14, title: 'task 3', status: 'todo' },
     ]);
     const [newTask, setNewTask] = useState('');
 
@@ -32,17 +40,21 @@ const Todo = () => {
         ));
     };
 
+const handleDeleteTask = (id) => {
+    setTasks(tasks.filter(task => task.id !== id));
+};
 
-    const renderTasks = (status, color, textColor) => (
-        <ul>
-            {tasks.filter(task => task.status === status).map((task) => (
-                <li
-                    key={task.id}
+const renderTasks = (status, color, textColor) => (
+    <ul className='overflow-y-auto max-h-[100%]'>
+        {tasks.filter(task => task.status === status).map((task) => (
+            <li
+                key={task.id}
                     className={`${color} p-2 px-4 mb-1 rounded-3xl ${textColor} font-semibold flex justify-between items-center`}
                 >
                     <span>{task.title}</span>
                     {/* Dropdown Actions */}
                     <div className="hs-dropdown relative inline-flex">
+                        
                         <button
                             id={`hs-dropdown-default-${task.id}`}
                             type="button"
@@ -56,9 +68,10 @@ const Todo = () => {
                                 if (menu) menu.classList.toggle('hidden');
                             }}
                         >
-                            Actions
+                           
                             <svg className="size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                         </button>
+                        <button onClick={() => handleDeleteTask(task.id)} className='text-xs px-1 h-4 my-2 ml-2 bg-black text-white rounded-3xl'>X</button>
                         <div
                             id={`dropdown-menu-${task.id}`}
                             className="transition-[opacity,margin] duration opacity-0 hidden min-w-60 bg-white shadow-md rounded-lg mt-2 absolute z-10 right-0"
@@ -121,7 +134,7 @@ const Todo = () => {
                             Task : {tasks.filter(task => task.status === 'todo').length}
                         </p>
                     </div>
-                    <div className='bg-white w-full rounded-2xl p-2 h-full'>
+                    <div className='bg-white w-full rounded-2xl p-2 h-[90%] '>
                         {renderTasks('todo', 'bg-[#CBD87D]', 'text-white')}
                     </div>
                 </div>
@@ -133,7 +146,7 @@ const Todo = () => {
                             Task : {tasks.filter(task => task.status === 'in-progress').length}
                         </p>
                     </div>
-                    <div className='bg-white w-full rounded-2xl p-2 h-full'>
+                    <div className='bg-white w-full rounded-2xl p-2 h-[90%]'>
                         {renderTasks('in-progress', 'bg-[#A6A0D2]', 'text-white')}
                     </div>
                 </div>
@@ -145,7 +158,7 @@ const Todo = () => {
                             Task : {tasks.filter(task => task.status === 'completed').length}
                         </p>
                     </div>
-                    <div className='bg-white w-full rounded-2xl p-2 h-full'>
+                    <div className='bg-white w-full rounded-2xl p-2 h-[90%]'>
                         {renderTasks('completed', 'bg-[#EAECEB]', 'text-black')}
                     </div>
                 </div>
