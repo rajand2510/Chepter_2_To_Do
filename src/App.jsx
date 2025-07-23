@@ -1,10 +1,12 @@
+
 import './App.css'
-import NoteApp from './Components/NoteApp'
+import Todo from './Todo'
+
 function App() {
  
   return (
     <>
-   <NoteApp/>
+      <Todo/>
     </>
   )
 }
